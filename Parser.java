@@ -66,4 +66,11 @@ public class Parser
             return new Command(null, word2); 
         }
     }
+    //Q20
+    // This allows the Game class to access the CommandWords
+    // object and call its methods.
+    public CommandWords getCommands()
+    {
+        return commands;
+    } 
 }
