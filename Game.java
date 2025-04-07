@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -19,18 +21,27 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    //Q20
+    private Inventory inventory;
+    //Q21
+    private Stack<Room> roomHistory;
+    // Stack to keep track of the visited rooms
     //  
     /**
      * Create the game and initialise its internal map.
+     * سازنده کلاس. بازی رو راه‌اندازی می‌کنه و اتاق‌ها رو می‌سازه.          
      */
-    public Game() 
+    public Game()
     {
         createRooms();
         parser = new Parser();
+        inventory = new Inventory(); 
+        roomHistory = new Stack<>(); 
     }
 
     /**
      * Create all the rooms and link their exits together.
+     * اتاق‌ها رو تعریف و به هم وصل می‌کنه.           
      */
     private void createRooms()
     {
@@ -60,10 +71,14 @@ public class Game
         office.setExit("west",lab);
 
         currentRoom = outside;  // start game outside
+        
+        outside.addItem(new Item("map"));
+        theater.addItem(new Item("projector"));
     }
 
     /**
      *  Main play routine.  Loops until end of play.
+     *  حلقه‌ی اصلی بازی. تا وقتی کاربر «quit» نزده بازی رو ادامه میده و دستورات رو می‌خونه و اجرا می‌کنه.         
      */
     public void play() 
     {            
@@ -94,9 +109,11 @@ public class Game
     }
    
     //Q6,5
+       //اطلاعات اتاق فعلی رو چاپ می‌کنه.           
     public void printLocationInfo(){
-      System.out.println( "You are " + currentRoom.getDescription());
-      System.out.println(currentRoom.getExitString());
+       System.out.println( "You are " + currentRoom.getDescription());
+       System.out.println(currentRoom.getExitString());
+      System.out.println(currentRoom.getItemDescription());
     }
     
 
@@ -104,6 +121,7 @@ public class Game
      * Given a command, process (that is: execute) the command.
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
+     * دستوراتی که کاربر وارد می‌کنه رو بررسی و اجرا می‌کنه.          
      */
     private boolean processCommand(Command command) 
     {
@@ -128,8 +146,13 @@ public class Game
         else if (commandWord.equals("look")) {
             System.out.println("Looking Around...");
         }
-        
-
+        //Q20
+        else if (commandWord.equals("take")) {
+            takeItem(command);
+        }
+        else if (commandWord.equals("drop")) {
+            dropItem(command);
+        }
         return wantToQuit;
     }
 
@@ -153,6 +176,7 @@ public class Game
     /** 
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
+     * اگر مسیر معتبر باشه، بازیکن رو به اتاق جدید میبره.          
      */
     private void goRoom(Command command) 
     {
@@ -192,4 +216,44 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
+    //Q20
+    private void takeItem(Command command) {
+        if (command.hasSecondWord()) {
+            String itemName = command.getSecondWord();
+            if (currentRoom.hasItem(itemName)) {
+                Item item = currentRoom.removeItem(itemName);
+                inventory.addItem(item);
+                System.out.println("You took the " + itemName + ".");
+            } else {
+                System.out.println("There is no " + itemName + " here.");
+            }
+        } else {
+            System.out.println("Take what?");
+        }
+    }
+    //Q20
+     private void dropItem(Command command) {
+        if (command.hasSecondWord()) {
+            String itemName = command.getSecondWord();
+            if (inventory.hasItem(itemName)) {
+                Item item = inventory.removeItem(itemName);
+                currentRoom.addItem(item);
+                System.out.println("You dropped the " + itemName + ".");
+            } else {
+                System.out.println("You don't have that item.");
+            }
+        } else {
+            System.out.println("Drop what?");
+        }
+    }
+    //Q21
+     private void goBack() {
+        if (!roomHistory.isEmpty()) {
+            currentRoom = roomHistory.pop(); // Pop the last room from the stack
+            printLocationInfo();
+        } else {
+            System.out.println("You can't go back. This is the starting point.");
+        }
+    }
 }
+

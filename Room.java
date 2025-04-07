@@ -1,7 +1,5 @@
 import java.util.HashMap;
 
-
-
 /**
  * Class Room - a room in an adventure game.
  *
@@ -18,10 +16,11 @@ import java.util.HashMap;
  */
 public class Room 
 {
-    //Q6
-    private String description;
-    private HashMap<String,Room> exits;
-    
+   //Q6
+   private String description;
+   private HashMap<String, Item> items;
+   private HashMap<String,Room> exits;
+   // Q20
    /**
       * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -31,30 +30,64 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
+        items = new HashMap<>(); 
         exits = new HashMap<>();
     }
+    //Q20
+   public void addItem(Item item) {
+        items.put(item.getName(), item);
+   }
+   
+   public Item removeItem(String itemName) {
+        return items.remove(itemName);
+   }
+   
+   public boolean hasItem(String itemName) {
+        return items.containsKey(itemName);
+   }
+   
+   public String getDescription() {
+        return description;
+   }
+   
+   public void setExit(String direction, Room neighbor) {
+        exits.put(direction, neighbor);
+   } 
     //Q6//Q7//Q8
    public Room getExit(String direction){
      Room nextRoom = exits.get(direction);
      return nextRoom;
    }
    //Q11
-   public String getLongDescription(){
-        return "You are" + description + ".\n"+ getExitString();
-   }
+   // public String getLongDescription(){
+        // return "You are" + description + ".\n"+ getExitString();
+   // }
    
       /** * Return a description of the room’s exits, 
     * for example, "Exits: north west". 
      * @return A description of the available exits. 
     */ 
    //Q10
-    public String getExitString(){
+   public String getExitString(){
         String exitString = "Exits: ";
         for(String direction : exits.keySet()){
            exitString += (direction + "");
         }
-        return exitString;
+        return exitString.trim();
     }
+    
+   public String getItemDescription() {
+        if (items.isEmpty()) {
+            return "There are no items here.";
+        }
+        String itemDescription = "Items in this room: ";
+        for (String itemName : items.keySet()) {
+            itemDescription += itemName + " ";
+        }
+        return itemDescription.trim();
+   }
+}
+    
     // /**
      // * Define the exits of this room.  Every direction either leads
      // * to another room or is null (no exit there).
@@ -80,17 +113,8 @@ public class Room
      // }
     
      
-     // Q8
-   public void setExit(String direction, Room neighbor) {
-       exits.put(direction, neighbor);
-   }
 
-   /**
-     * @return The description of the room.
-     */
-    public String getDescription()
-   {
-        return description;
-   }
 
-}
+   
+   
+

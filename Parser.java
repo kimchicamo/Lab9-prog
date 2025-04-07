@@ -23,6 +23,7 @@ public class Parser
 
     /**
      * Create a parser to read from the terminal window.
+     * سازنده کلاس. لیست دستورات مجاز رو آماده می‌کنه.         
      */
     public Parser() 
     {
@@ -36,6 +37,7 @@ public class Parser
     
     /**
      * @return The next command from the user.
+     * ورودی کاربر رو می‌گیره و به شیء Command تبدیل می‌کنه.           
      */
     public Command getCommand() 
     {
@@ -69,6 +71,7 @@ public class Parser
     //Q18 
     // This allows the Game class to access the CommandWords
     // object and call its methods.
+   
     public CommandWords getCommands()
     {
         return commands;
