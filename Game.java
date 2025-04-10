@@ -153,9 +153,13 @@ public class Game
         else if (commandWord.equals("drop")) {
             dropItem(command);
         }
-        //Q23
+        //Q23//Q24 made it smarter
         else if (commandWord.equals("back")) {
-            back();
+            if (command.hasSecondWord()) {
+                System.out.println("Back command does not take a second word!");
+            } else {
+                back();
+            }
         }
         return wantToQuit;
     }
