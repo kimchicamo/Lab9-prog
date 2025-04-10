@@ -23,7 +23,7 @@ public class Game
     private Room currentRoom;
     //Q20
     private Inventory inventory;
-    //Q21
+    //Q21,23
     private Stack<Room> roomHistory;
     // Stack to keep track of the visited rooms
     //  
@@ -153,6 +153,10 @@ public class Game
         else if (commandWord.equals("drop")) {
             dropItem(command);
         }
+        //Q23
+        else if (commandWord.equals("back")) {
+            back();
+        }
         return wantToQuit;
     }
 
@@ -196,11 +200,20 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            roomHistory.push(currentRoom);
             currentRoom = nextRoom;
             printLocationInfo();
         }
     }
-
+    //Q23
+    private void back() {
+        if (roomHistory.isEmpty()) {
+            System.out.println("You are at the starting point. No room to go back to!");
+        } else {
+            currentRoom = roomHistory.pop();
+            printLocationInfo();
+        }
+    }
     /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
