@@ -21,6 +21,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Player player;
     //Q20
     private Inventory inventory;
     //Q21,23
@@ -70,10 +71,14 @@ public class Game
         
         office.setExit("west",lab);
 
-        currentRoom = outside;  // start game outside
+        currentRoom = outside;
+        
+        //Q28
+        player = new Player("Kimia", outside); 
         
         outside.addItem(new Item("map"));
         theater.addItem(new Item("projector"));
+        
     }
 
     /**
@@ -186,9 +191,18 @@ public class Game
      * the new room, otherwise print an error message.
      * اگر مسیر معتبر باشه، بازیکن رو به اتاق جدید میبره.          
      */
-    private void goRoom(Command command) 
-    {
-        if(!command.hasSecondWord()) {
+    private void goRoom(Command command) {
+        // {
+        // Room nextRoom = player.getCurrentRoom().getExit(direction);
+
+        // if (nextRoom == null) {
+          // System.out.println("There is no door!");
+        // } else {
+            // player.setCurrentRoom(nextRoom);
+           // System.out.println(player.getCurrentRoom().getLongDescription());
+         // }
+        // 
+       if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("Go where?");
             return;
@@ -204,11 +218,13 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
-            roomHistory.push(currentRoom);
+            player.getCurrentRoom();
             currentRoom = nextRoom;
             printLocationInfo();
-        }
+       }
     }
+         
+
     //Q23
     private void back() {
         if (roomHistory.isEmpty()) {
@@ -233,34 +249,35 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
-    //Q20
+    //Q20//28 Q29
+    // Take command 
     private void takeItem(Command command) {
-        if (command.hasSecondWord()) {
-            String itemName = command.getSecondWord();
-            if (currentRoom.hasItem(itemName)) {
-                Item item = currentRoom.removeItem(itemName);
-                inventory.addItem(item);
-                System.out.println("You took the " + itemName + ".");
-            } else {
-                System.out.println("There is no " + itemName + " here.");
-            }
-        } else {
+        if (!command.hasSecondWord()) {
             System.out.println("Take what?");
+            return;
         }
-    }
-    //Q20
-     private void dropItem(Command command) {
-        if (command.hasSecondWord()) {
-            String itemName = command.getSecondWord();
-            if (inventory.hasItem(itemName)) {
-                Item item = inventory.removeItem(itemName);
-                currentRoom.addItem(item);
-                System.out.println("You dropped the " + itemName + ".");
-            } else {
-                System.out.println("You don't have that item.");
-            }
+        String itemName = command.getSecondWord();
+        Item item = player.getCurrentRoom().removeItem(itemName);
+        if (item != null) {
+            player.addItem(item);
+            System.out.println("You have taken the " + itemName + ".");
         } else {
-            System.out.println("Drop what?");
+            System.out.println("There is no such item here!");
+        }
+    }   
+    //Q20//28//Q29
+    private void dropItem(Command command) {
+        if (!command.hasSecondWord()) {
+             System.out.println("Drop what?");
+            return;
+        }
+         String itemName = command.getSecondWord();
+         Item item = player.removeItem(itemName);
+        if (item != null) {
+            player.getCurrentRoom().addItem(item);
+            System.out.println("You have dropped the " + itemName + ".");
+        } else {
+            System.out.println("You don't have that item!");
         }
     }
     //Q21

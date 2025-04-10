@@ -7,9 +7,11 @@ import java.util.HashMap;
  */
 public class Inventory {
     private HashMap<String, Item> items;
+    
     //Q20,22
     public Inventory() {
         items = new HashMap<>();
+        
     }
 
     // Add an item to the inventory
