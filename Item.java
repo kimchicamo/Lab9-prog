@@ -9,17 +9,26 @@ public class Item {
     private String name;
     //Q22 20
     private String description;
+    //31
+    private int weight;
 
-    public Item(String name) {
+    public Item(String name, String description, int weight) {
         this.name = name;
-        this.description = "This is a " + name + ".";
+        this.description = description;
+        //Q31
+        this.weight = weight; 
     }
+
 
     public String getName() {
-        return name;
-    }
+         return name;
+     }
 
     public String getDescription() {
         return description;
+    }
+    //Q31
+    public int getWeight() { 
+        return weight;
     }
 }

@@ -14,78 +14,51 @@ import java.util.HashMap;
  * @author  Michael Kölling and David J. Barnes
  * @version 2016.02.29
  */
-public class Room 
-{
-   //Q6
-   private String description;
-   private HashMap<String, Item> items;
-   private HashMap<String,Room> exits;
-   // Q20
-   /**
-      * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
-     * "an open court yard".
-     * @param description The room's description.
-     */
-    public Room(String description) 
-    {
+
+public class Room {
+    private String description;
+    private HashMap<String, Room> exits;
+    private Inventory items;  
+    
+    public Room(String description) {
         this.description = description;
-        items = new HashMap<>(); 
-        exits = new HashMap<>();
+        this.exits = new HashMap<>();
+        this.items = new Inventory();  
     }
-    //Q20
-   public void addItem(Item item) {
-        items.put(item.getName(), item);
-   }
-   
-   public Item removeItem(String itemName) {
-        return items.remove(itemName);
-   }
-   
-   public boolean hasItem(String itemName) {
-        return items.containsKey(itemName);
-   }
-   
-   public String getDescription() {
-        return description;
-   }
-   
-   public void setExit(String direction, Room neighbor) {
+
+    public void setExit(String direction, Room neighbor) {
         exits.put(direction, neighbor);
-   } 
-    //Q6//Q7//Q8
-   public Room getExit(String direction){
-     Room nextRoom = exits.get(direction);
-     return nextRoom;
-   }
-   //Q11
-   // public String getLongDescription(){
-        // return "You are" + description + ".\n"+ getExitString();
-   // }
-   
-      /** * Return a description of the room’s exits, 
-    * for example, "Exits: north west". 
-     * @return A description of the available exits. 
-    */ 
-   //Q10
-   public String getExitString(){
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getExitString() {
         String exitString = "Exits: ";
-        for(String direction : exits.keySet()){
-           exitString += (direction + "");
+        for (String direction : exits.keySet()) {
+            exitString += direction + " ";
         }
         return exitString.trim();
     }
+
     
-   public String getItemDescription() {
-        if (items.isEmpty()) {
-            return "There are no items here.";
-        }
-        String itemDescription = "Items in this room: ";
-        for (String itemName : items.keySet()) {
-            itemDescription += itemName + " ";
-        }
-        return itemDescription.trim();
-   }
+    public void addItem(Item item) {
+        items.addItem(item);
+    }
+    //Q31
+    public Item removeItem(String itemName) {
+        return items.removeItem(itemName);
+    }
+   
+    public String getItemsList() {
+        return items.getItemsList();  
+    }
+
+    
+    public Room getExit(String direction) {
+        return exits.get(direction);
+    }
 }
     
     // /**

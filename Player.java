@@ -11,11 +11,16 @@ public class Player {
     private String name;
     private Room currentRoom;
     private Inventory inventory;
+    private int maxWeight;
+    private int currentWeight;
 
-    public Player(String name, Room startingRoom) {
+
+     public Player(String name, Room startingRoom, int maxWeight) {
         this.name = name;
         this.currentRoom = startingRoom;
         this.inventory = new Inventory();
+        this.maxWeight = maxWeight;
+        this.currentWeight = 0;
     }
 
     public String getName() {
@@ -33,13 +38,26 @@ public class Player {
     public Inventory getInventory() {
         return inventory;
     }
-
-    public void addItem(Item item) {
-        inventory.addItem(item);
+    //Q31
+    public boolean canCarry(Item item) {
+        return currentWeight + item.getWeight() <= maxWeight;
     }
-
+    //31
+    public void addItem(Item item) {
+         if (canCarry(item)) {
+            inventory.addItem(item);
+            currentWeight += item.getWeight();
+        } else {
+            System.out.println("This item is too heavy! You can't carry it.");
+        }
+    }
+    //31
     public Item removeItem(String itemName) {
-        return inventory.removeItem(itemName);
+        Item removedItem = inventory.removeItem(itemName);
+        if (removedItem != null) {
+            currentWeight -= removedItem.getWeight();
+        }
+        return removedItem;
     }
 
     public boolean hasItem(String itemName) {
@@ -47,6 +65,6 @@ public class Player {
     }
 
     public String getInventoryList() {
-        return inventory.getItemsList();
+        return inventory.getItemsList() + " (Total weight: " + currentWeight + "/" + maxWeight + ")";
     }
 }

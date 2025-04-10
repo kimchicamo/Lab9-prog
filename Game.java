@@ -71,14 +71,19 @@ public class Game
         
         office.setExit("west",lab);
 
+        
+        //Q28//Q31
+        player = new Player("Kimia", outside, 10); 
+        
+        Item book = new Item("book", "An old dusty book", 2);
+        Item rock = new Item("rock", "A heavy rock", 5);
+        Item key = new Item("key", "A small rusty key", 1);
+        
+        outside.addItem(rock);     
+        theater.addItem(book);    
+        office.addItem(key);    
+        
         currentRoom = outside;
-        
-        //Q28
-        player = new Player("Kimia", outside); 
-        
-        outside.addItem(new Item("map"));
-        theater.addItem(new Item("projector"));
-        
     }
 
     /**
@@ -116,9 +121,9 @@ public class Game
     //Q6,5
        //اطلاعات اتاق فعلی رو چاپ می‌کنه.           
     public void printLocationInfo(){
-       System.out.println( "You are " + currentRoom.getDescription());
-       System.out.println(currentRoom.getExitString());
-      System.out.println(currentRoom.getItemDescription());
+       System.out.println("You are " + currentRoom.getDescription());
+    System.out.println(currentRoom.getExitString());
+    System.out.println(currentRoom.getItemsList()); 
     }
     
 
